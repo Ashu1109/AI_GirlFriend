@@ -1,0 +1,20 @@
+# Global dockerignore to speed up context
+.git
+.gitignore
+__pycache__
+*.py[cod]
+node_modules
+.next
+out
+.turbo
+.vercel
+.env
+.env.*
+*.log
+/tmp
+agent-ui/node_modules
+agent-ui/.next
+agent-ui/out
+agent-ui/.eslintcache
+agent-ui/.turbo
+agent-ui/.vercel
