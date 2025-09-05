@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: pgvector
+    environment:
+      POSTGRES_DB: ai
+      POSTGRES_USER: ai
+      POSTGRES_PASSWORD: ai
+    ports:
+      - "5532:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-backend
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PGVECTOR_URL=postgresql+psycopg://ai:ai@db:5432/ai
+    volumes:
+      - ./tmp:/app/tmp
+      - ./.env:/app/.env:ro
+    depends_on:
+      - db
+    ports:
+      - "7777:7777"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: agent-ui/Dockerfile
+    container_name: agent-frontend
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgvector_data:
+    driver: local

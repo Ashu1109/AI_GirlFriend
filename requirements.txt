@@ -1,0 +1,8 @@
+agno
+python-dotenv
+openai
+psycopg[binary]
+pgvector
+sqlalchemy
+fastapi
+uvicorn
