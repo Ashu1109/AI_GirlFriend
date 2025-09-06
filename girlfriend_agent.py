@@ -28,7 +28,8 @@ db_file = "tmp/agent.db"
 # Load instructions from prompt.json
 with open("prompt.json", "r") as f:
     prompt_data = json.load(f)
-    instructions = prompt_data["data"][0]["prompt"]
+    instructions_Ava = prompt_data["data"][0]["prompt"]
+    instructions_Sophia = prompt_data["data"][1]["prompt"]
 
 # Ensure the database directory exists
 os.makedirs(os.path.dirname(db_file), exist_ok=True)
@@ -52,7 +53,7 @@ memory = Memory(
 storage = SqliteStorage(table_name="chat_history", db_file=db_file)
 
 
-girlfriend_agent = Agent(
+girlfriend_agent_Ava = Agent(
     name="Ava",
     model=OpenAIChat(id="gpt-4o"),
     tools=[
@@ -72,11 +73,35 @@ girlfriend_agent = Agent(
     knowledge=knowledge_base,
     # Allow the agent to read older chat history when needed
     read_chat_history=True,
-    instructions=instructions,
+    instructions=instructions_Ava,
     markdown=False,
 )
 
-playground = Playground(agents=[girlfriend_agent])
+girlfriend_agent_sophia = Agent(
+    name="sophia",
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[
+        ReasoningTools(add_instructions=True),
+    ],
+    # Store memories in a database
+    memory=memory,
+    # Give the Agent the ability to update memories
+    enable_agentic_memory=True,
+    # OR - Run the MemoryManager after each response
+    enable_user_memories=True,
+    # Store the chat history in the database
+    storage=storage,
+    # Add the chat history to the messages
+    add_history_to_messages=True,
+    # Vector DB knowledge base for long-context retrieval
+    knowledge=knowledge_base,
+    # Allow the agent to read older chat history when needed
+    read_chat_history=True,
+    instructions=instructions_Sophia,
+    markdown=False,
+)
+
+playground = Playground(agents=[girlfriend_agent_Ava, girlfriend_agent_sophia])
 app = playground.get_app()
 
 if __name__ == "__main__":
