@@ -14,6 +14,7 @@ A sophisticated AI girlfriend companion built with the Agno framework, featuring
 - **Docker Support**: Easy deployment with Docker Compose
 - **Reasoning Tools**: AI agent with advanced reasoning capabilities
 
+
 ## 🏗️ Architecture
 
 ### Backend (Python)
