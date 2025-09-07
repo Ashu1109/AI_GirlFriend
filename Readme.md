@@ -1,10 +1,11 @@
-# AI Girlfriend Agent - Ava
+# AI Girlfriend Agent - Ava & Sophia
 
-A sophisticated AI girlfriend companion built with the Agno framework, featuring a modern web interface and advanced memory capabilities. This project creates "Ava," a warm, supportive, and playful virtual girlfriend with persistent memory and conversation history.
+A sophisticated AI girlfriend companion built with the Agno framework, featuring a modern web interface and advanced memory capabilities. This project includes two personas — "Ava" and "Sophia" — warm, supportive, and playful AI companions with persistent memory and conversation history. Switch personas in the Playground/UI to match your vibe.
 
 ## 🌟 Features
 
-- **AI Girlfriend Companion**: Ava, a 23-year-old virtual girlfriend with a warm, supportive, and flirtatious personality
+- **Dual AI Companions**: Ava and Sophia — distinct, customizable personalities
+- **Persona Switching**: Choose between Ava and Sophia in the Playground/UI
 - **Persistent Memory**: Advanced memory system that remembers past conversations and user preferences
 - **Modern Web Interface**: Beautiful, responsive chat UI built with Next.js and Tailwind CSS
 - **Real-time Streaming**: Live chat experience with streaming responses
@@ -17,7 +18,7 @@ A sophisticated AI girlfriend companion built with the Agno framework, featuring
 
 ### Backend (Python)
 - **Agno Framework**: Advanced AI agent framework
-- **OpenAI GPT-4o**: Language model for natural conversations
+- **OpenAI GPT-4o (chat) + GPT-4.1 (memory)**: Models for conversations and memory creation
 - **SQLite**: Local storage for chat history and memories
 - **PgVector**: Vector database for semantic search
 - **FastAPI**: High-performance web framework
@@ -103,25 +104,23 @@ pnpm dev
 
 ## 🎯 Usage
 
-1. **Start a Conversation**: Open the web interface and begin chatting with Ava
-2. **Memory Persistence**: Ava remembers your conversations and preferences across sessions
+1. **Start a Conversation**: Open the web interface and begin chatting with Ava or Sophia (select in the UI)
+2. **Memory Persistence**: Your chosen companion remembers conversations and preferences across sessions
 3. **Multi-modal Chat**: Send text, images, audio, or video messages
 4. **Session Management**: Create multiple chat sessions and switch between them
-5. **Customization**: Modify the personality in `prompt.json` to adjust Ava's behavior
+5. **Customization**: Modify the personalities in `prompt.json` to adjust Ava's and Sophia's behavior
 
 ## 🔧 Configuration
 
 ### Agent Personality
 
-Edit `prompt.json` to customize Ava's personality, tone, and behavior:
+Edit `prompt.json` to customize Ava's and Sophia's personalities, tone, and behavior. The agent reads the first two entries in `data` as Ava and Sophia respectively:
 
 ```json
 {
   "data": [
-    {
-      "id": "1",
-      "prompt": "Your custom instructions here..."
-    }
+    { "id": "ava", "prompt": "Ava's custom instructions here..." },
+    { "id": "sophia", "prompt": "Sophia's custom instructions here..." }
   ]
 }
 ```
@@ -133,10 +132,15 @@ Edit `prompt.json` to customize Ava's personality, tone, and behavior:
 
 ### Model Configuration
 
-The agent uses OpenAI's GPT-4o model. You can modify the model in `girlfriend_agent.py`:
+This project uses OpenAI's GPT-4o for conversations and GPT-4.1 for creating memories. You can modify these in `girlfriend_agent.py`:
 
 ```python
-model=OpenAIChat(id="gpt-4o")  # Change model here
+# Conversation models (both agents)
+girlfriend_agent_Ava = Agent(model=OpenAIChat(id="gpt-4o"), ...)
+girlfriend_agent_sophia = Agent(model=OpenAIChat(id="gpt-4o"), ...)
+
+# Memory model
+memory = Memory(model=OpenAIChat(id="gpt-4.1"), ...)
 ```
 
 ## 📁 Project Structure
